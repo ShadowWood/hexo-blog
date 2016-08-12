@@ -16,6 +16,7 @@ npm, Node Package Manager, 是随同node.js一起安装的包管理工具。该�
 + 允许开发者将自己编写的包或命令行程序上传到npm服务器供别人使用。
 
 从而方便开发者的项目构建和解决node.js项目部署上的很多问题。
+<!-- more -->
 
 ### node.js的安装
 

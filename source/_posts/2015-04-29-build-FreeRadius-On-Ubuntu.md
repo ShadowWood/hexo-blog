@@ -15,6 +15,8 @@ img_url: "http://7xu027.com1.z0.glb.clouddn.com/build-Radius.jpg"
 
 + [http://blog.csdn.net/liang13664759/article/details/1574367/](http://blog.csdn.net/liang13664759/article/details/1574367/)
 
+<!-- more -->
+
 ### 一、系统配置及需要安装的软件
 
 + 系统：ubuntu 14.04

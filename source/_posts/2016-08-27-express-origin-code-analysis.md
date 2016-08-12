@@ -11,3 +11,5 @@ img_url: "http://7xu027.com1.z0.glb.clouddn.com/own-world.jpg"
 ### 前言
 
 先挖个坑，慢慢填
+
+<!-- more -->

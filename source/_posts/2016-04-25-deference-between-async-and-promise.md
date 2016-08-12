@@ -15,6 +15,7 @@ img_url: "http://7xu027.com1.z0.glb.clouddn.com/own-world.jpg"
 结构将会是一层套一层不断的嵌套下去形成"callback hell(回调地狱)"。虽然我们也可以通过声明函数的
 方法来简化回调结构并避免callback hell的产生，但是如果遇到一些比较复杂的依赖关系的话，可能依然
 会有一些问题。最近接触到node.js两个不同的异步模块async和Promise，给大家做一下对比和分享。
+<!-- more -->
 
 ### async 和 Promise简介
 

@@ -16,22 +16,16 @@ menu:
   tags:
     url: /tags
   github:
-    url: https://github.com/yscoder
+    url: https://github.com/shadowwood
     target: _blank
-  weibo:
-    url: http://www.weibo.com/ysweb
-    target: _blank
-  link:
-    text: 测试
-    url: /404
 
 rss: /atom.xml
 
 #你的头像url
-avatar: /img/logo.jpg
+avatar: /img/avatar.jpg
 
 # email
-email: 634206017@qq.com
+email: shadowwood@foxmail.com
 
 # 设置 Android L Chrome 浏览器状态栏颜色
 color: '#3F51B5'
@@ -40,7 +34,7 @@ color: '#3F51B5'
 tags:
   title: 标签
 
-excerpt_length: 200
+excerpt_length: 50
 excerpt_link: more
 mathjax: false
 archive_yearly: true

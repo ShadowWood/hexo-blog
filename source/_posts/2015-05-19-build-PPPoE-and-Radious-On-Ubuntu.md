@@ -15,6 +15,8 @@ img_url: "http://7xu027.com1.z0.glb.clouddn.com/PPPoE-Radius.jpg"
 + [ubuntu上搭建PPPoE认证服务器](/linux/2015/04/18/build-PPPoE-On-Ubuntu.html)
 + [ubuntu上安装和配置FreeRadius](/linux/2015/04/29/build-FreeRadius-On-Ubuntu.html)
 
+<!-- more -->
+
 ### PPPoE服务器配置
 
 我们只需要在之前的PPPoE服务器上修改和添加一些东西即可。
