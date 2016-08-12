@@ -20,8 +20,8 @@ Promise标准已经被写入了ES6的语法中，ES6已经有了原生的Promise
 
 Promise/A+是一个开放、健全且通用的Javascript Promise标准，是由Javascript的开发者制定的，以供其他开发者参考。
 
-+ Promise/A+英文原文([Promise/A+](https://promisesaplus.com/))
-+ Promise/A+中文解读([Promise/A+](http://malcolmyu.github.io/malnote/2015/06/12/Promises-A-Plus/))
++ [Promise/A+英文原文](https://promisesaplus.com/)
++ [Promise/A+中文解读](http://malcolmyu.github.io/malnote/2015/06/12/Promises-A-Plus/)
 
 上面是关于Promise/A+规范的资料，这里就不再对Promise/A+规范做进一步的解读了。
 
@@ -109,8 +109,8 @@ Promise/A+是一个开放、健全且通用的Javascript Promise标准，是由J
 
         var self = this;
 
-        self.onResolvedCallback = []; // Promise resolve 的回调函数集
-	    self.onRejectedCallback = []; // Promise reject 的回调函数集
+        self.onResolvedCallback = []; // Promise resolved 的回调函数集
+	    self.onRejectedCallback = []; // Promise rejected 的回调函数集
 
 
         /*****此处省略了之前的status和value的set和get函数******/
@@ -119,7 +119,7 @@ Promise/A+是一个开放、健全且通用的Javascript Promise标准，是由J
             self.__setValue(val);
             self.__setStatus('Fulfilled')
             for (var i = 0; i < self.onResolvedCallback.length; i++) {
-                self.onResolvedCallback(val);
+                self.onResolvedCallback[i](val);
             }
         }
 
@@ -129,7 +129,7 @@ Promise/A+是一个开放、健全且通用的Javascript Promise标准，是由J
                 self.__setStatus('Rejected');
             }
             for (var i = 0; i < self.onRejectedCallback.length; i++) {
-                self.onRejectedCallback(err);
+                self.onRejectedCallback[i](err);
             }
         }
 
@@ -140,3 +140,7 @@ Promise/A+是一个开放、健全且通用的Javascript Promise标准，是由J
         }
 
     }
+
+注意这次加入了两个特别的值，onResolvedCallback和onRejectedCallback，分别用来存储Promise对象revolved和rejected时的回调函数。
+至于为什么需要使用这两个值以及这两个值实现了什么功能，这个在之后的构建.then方法的时候再详细解释。
+
