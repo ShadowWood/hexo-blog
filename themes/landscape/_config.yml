@@ -1,0 +1,53 @@
+# Header
+menu:
+  home:
+    text: 主页
+    url: /
+  archives:
+    url: /archives
+  tags:
+    url: /tags
+  github:
+    url: https://github.com/shadowwood
+    target: _blank
+rss: /atom.xml
+
+# Content
+excerpt_link: Read More
+fancybox: true
+
+# Sidebar
+sidebar: right
+widgets:
+- category
+- tag
+- tagcloud
+- archive
+- recent_posts
+
+# display widgets at the bottom of index pages (pagination == 2)
+index_widgets:
+# - category
+# - tagcloud
+# - archive
+
+# widget behavior
+archive_type: 'monthly'
+show_count: false
+
+# Miscellaneous
+google_analytics:
+favicon: /favicon.png
+twitter:
+google_plus:
+fb_admins:
+fb_app_id:
+
+avatar: /img/avatar.jpg
+email: shadowwood@foxmail.com
+tags:
+  title: 标签
+excerpt_link: more
+share: true
+disqus_shortname: disqus_shortname
+excerpt_link: more
