@@ -93,7 +93,7 @@ Chrome | FireFox(Gecko) | IE | Opera | Safari
 --------|------------------|----|--------|--------
 7+ | 4.0(2.0)  | 10+ | 12+ | 5+
 
-#### XMLRequest实现
+### XMLRequest实现
 当然除了ajax异步的方式，也可以是用XMLRequest的方式实现异步请求，如果是要传输二进制文件的话，
 一样是可以用到FormData对象来构造表单，然后用XMLRequest异步请求的方式将FormData对象当作表单提交即可。
 

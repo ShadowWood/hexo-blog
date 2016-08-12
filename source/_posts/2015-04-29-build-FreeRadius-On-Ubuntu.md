@@ -17,7 +17,7 @@ img_url: "http://7xu027.com1.z0.glb.clouddn.com/build-Radius.jpg"
 
 <!-- more -->
 
-### 一、系统配置及需要安装的软件
+### 系统配置及需要安装的软件
 
 + 系统：ubuntu 14.04
 + 安装软件：
@@ -28,7 +28,7 @@ img_url: "http://7xu027.com1.z0.glb.clouddn.com/build-Radius.jpg"
 
     sudo apt-get install freeradius-mysql mysql-server
 
-### 二、进行FreeRadius基本配置
+### 进行FreeRadius基本配置
 
 修改 /etc/freeradius/clients.conf，这是FreeRadius的客户端配置文件，在这里我们要将我们之后要与服务器连接的客户端的信息写入配置文件，例如加入如下几行：
 
@@ -69,7 +69,7 @@ img_url: "http://7xu027.com1.z0.glb.clouddn.com/build-Radius.jpg"
                             AND acctstoptime IS NULL"
 
 
-### 三、配置mysql数据库
+### 配置mysql数据库
 
 先切换到/etc/freeradius/sql/mysql文件夹下(以便进行之后的操作)，然后登录mysql数据库：
 
@@ -122,7 +122,7 @@ img_url: "http://7xu027.com1.z0.glb.clouddn.com/build-Radius.jpg"
 
 ***
 
-### 四、本地测试
+### 本地测试
 
 使用调试模式启动 FreeRadius：
 
