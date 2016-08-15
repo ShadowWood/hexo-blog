@@ -80,5 +80,4 @@ feed:
   path: atom.xml
   limit: 0
 
-
-disqus_shortname: shadowwoodme
+duoshuo: shadowwood

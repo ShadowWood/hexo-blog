@@ -11,8 +11,7 @@ img_url: "http://7xu027.com1.z0.glb.clouddn.com/own-world.jpg"
 ### 前言
 
 Promise是js的一个异步流程控制标准，是为了解决js中异步回调过多导致的代码结构混乱的问题。
-Promise标准已经被写入了ES6的语法中，ES6已经有了原生的Promise对象。之前对async和promise
-的使用做了一个简单的对比，为了更好的理解Promise对异步回调的一个控制流程，这次根据Promise/A+规范实现一个简单的Promise。
+Promise标准已经被写入了ES6的语法中，ES6已经有了原生的Promise对象。之前对async和promise的使用做了一个简单的对比，为了更好的理解Promise对异步回调的一个控制流程，这次根据Promise/A+规范实现一个简单的Promise。
 
 <!-- more -->
 
@@ -141,6 +140,19 @@ Promise/A+是一个开放、健全且通用的Javascript Promise标准，是由J
 
     }
 
-注意这次加入了两个特别的值，onResolvedCallback和onRejectedCallback，分别用来存储Promise对象revolved和rejected时的回调函数。
+注意这次加入了两个特别的值，`onResolvedCallback` 和 `onRejectedCallback`，分别用来存储 Promise 对象 revolved 和 rejected 时的回调函数。
 至于为什么需要使用这两个值以及这两个值实现了什么功能，这个在之后的构建.then方法的时候再详细解释。
+
+其实 resolve 和 reject 两个操作流程基本是一致的，都进行了三步操作：
+
+1. 设置终值或拒绝原因;
+2. 修改状态为`Resovled`或 `Rejected`
+3. 遍历回调函数集并执行回调函数；
+
+这两者操作的区别只在于状态值和回调函数集不同，所以这两个函数完全可以合并成一个操作函数。这里只是为了语义更清晰一点，这里还是决定分开写。
+之后直接执行Promise对象的fn参数函数，并且传入`resovle` 和 `reject` 当作fn的参数，之后在fn内部执行回调。
+注意，这里执行fn的时候必须使用try catch捕捉错误并执行reject，因为完全可能在fn的执行过程中出现错误，这一部分也需要在Promise对象里捕捉到。
+
+### .then方法
+
 
