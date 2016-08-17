@@ -14,7 +14,6 @@ Promise是js的一个异步流程控制标准，是为了解决js中异步回调
 Promise标准已经被写入了ES6的语法中，ES6已经有了原生的Promise对象。之前对async和promise的使用做了一个简单的对比，为了更好的理解Promise对异步回调的一个控制流程，这次根据Promise/A+规范实现一个简单的Promise。
 
 <!-- more -->
-
 ### Promise/A+
 
 Promise/A+是一个开放、健全且通用的Javascript Promise标准，是由Javascript的开发者制定的，以供其他开发者参考。

@@ -9,6 +9,7 @@
     <div class="post-content" id="post-content" itemprop="postContent" >
     <% if (post.excerpt){ %>
         <%- post.excerpt %>
+        <a href="<%- url_for(post.path) %>" class="post-more waves-effect waves-button waves-light">阅读全文...</a>
     <% } else { %>
         <%- post.content %>
     <% } %>

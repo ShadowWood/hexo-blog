@@ -4,7 +4,7 @@
 
 # Site
 title: ShadowWood's Blog
-subtitle: 没事搞搞web技术
+subtitle: 睡睡觉，玩玩游戏编编程
 description: 一个懒人的分享
 author: Shadow Wood
 language: zh-CN
@@ -81,3 +81,22 @@ feed:
   limit: 0
 
 duoshuo: shadowwood
+
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: true
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: true
+    categories: true
+    tags: true
