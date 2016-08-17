@@ -2,7 +2,7 @@
 layout: post
 title:  "浅谈js异步流程框架async与Promise的区别"
 date:   2016-04-25 16:02:00
-categories: javascript
+categories: Javascript
 tags: [javascript,node.js,async,Promise,异步]
 description: "异步流程的实现是node.js一个重要的模块，最近接触到async和Promise这两个node.js的异步模块，给大家做一下对比和简单的分享。"
 img_url: "http://7xu027.com1.z0.glb.clouddn.com/own-world.jpg"

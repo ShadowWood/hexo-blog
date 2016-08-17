@@ -81,22 +81,3 @@ feed:
   limit: 0
 
 duoshuo: shadowwood
-
-jsonContent:
-  meta: false
-  pages: false
-  posts:
-    title: true
-    date: true
-    path: true
-    text: true
-    raw: false
-    content: false
-    slug: false
-    updated: false
-    comments: false
-    link: false
-    permalink: false
-    excerpt: true
-    categories: true
-    tags: true

@@ -2,7 +2,7 @@
 layout: post
 title:  "浅析javascript的继承方式"
 date:   2016-04-20 17:08:30
-categories: javascript
+categories: Javascript
 tags: [javascript,继承]
 description: "本文将列举出javascript的6种继承方式及举例一些简单的应用场景"
 img_url: "http://7xu027.com1.z0.glb.clouddn.com/1736__new-york-in-blue_p.jpg"

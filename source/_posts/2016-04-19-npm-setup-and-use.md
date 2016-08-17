@@ -2,7 +2,7 @@
 layout: post
 title:  "node.js的安装与npm的使用"
 date:   2016-04-19 15:35:30
-categories: node.js
+categories: Node.js
 tags: [node.js,npm]
 description: "本文将介绍各平台下npm的安装以及npm常见命令的使用"
 img_url: "http://7xu027.com1.z0.glb.clouddn.com/node-js-wordpress.png"
