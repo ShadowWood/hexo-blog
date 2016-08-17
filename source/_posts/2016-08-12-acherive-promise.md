@@ -478,7 +478,7 @@ Promise/A+是一个开放、健全且通用的Javascript Promise标准，是由J
         }
 
         function rejectPromise(r) {
-            if (thenable) return;
+            if (thenCalled) return;
             thenCalled = true;
             reject(r)
         }
@@ -656,7 +656,7 @@ Promise/A+是一个开放、健全且通用的Javascript Promise标准，是由J
         }
 
         function rejectPromise(r) {
-            if (thenable) return;
+            if (thenCalled) return;
             thenCalled = true;
             reject(r)
         }

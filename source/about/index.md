@@ -12,6 +12,7 @@ comments: false
 
 		constructor () {
 			let fullPower = 100;
+			this.fullName = 'shadowwood'
 			this.programLang = {
 				'Python': 60/100,
 				'Javascript': 63/100,
@@ -27,7 +28,7 @@ comments: false
 
 	}
 
-	new Coder()
+	let ShadowWood = new Coder()
 
 
 
