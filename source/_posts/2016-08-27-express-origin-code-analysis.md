@@ -24,7 +24,7 @@ express是node.js的一个轻量级后端框架，本文将对express的源码�
     │   │   └── query.js
     │   ├── router
     │   │   ├── index.js
-    │   │   ├──  layer.js
+    │   │   ├── layer.js
     │   │   └── route.js
     │   ├── application.js
     │   ├── express.js
@@ -175,3 +175,56 @@ express模块的入口是 index.js，该文件中又引入了./lib/express.js，
 	});
 
 这是因为express 4.x之后，很多中间件依赖没有在express内部导入了，但是express有时会用到这些中间件，这里是一个中间件检测，告诉开发者数组内的中间件需要从外部install进来。
+
+### router
+./router文件夹下包括三个文件：
+
++ `layer.js`：定义中间件的基本数据结构
++ `route.js`：定义express的路由中间件Route;
++ `index.js`：定义一个中间件容器，也就是Router对象，用来存放路由中间件(Route)以及其他功能中间件
+
+> `Router` 和 `Route` 的区别：Router可以看作是一个中间件容器，不仅可以存放路由中间件（Route），还可以存放其他中间件；而Route仅仅是路由中间件，封装了路由信息。
+Router和Route都各自维护了一个stack数组，该数组就是用来存放中间件和路由的。
+
+#### layer.js
+
+首先来看layer.js中对于中间件的初始定义：
+	
+	var pathRegexp = require('path-to-regxp');
+
+	function Layer(path, options, fn) {
+		if (!(this instanceof Layer)) {
+			return new Layer(path, options, fn)
+		}
+
+		debug('new %s', path);
+		var opts = options || {};
+
+		this.handle = fn;
+		this.name = fn.name || '<anonymous>';
+		this.params = undefined;
+		this.path = undefined;
+		this.regexp = pathRegexp(path, this.keys = [], opts);
+
+		if (path === '/' && opts.end === false) {
+			this.regexp.fast_slash = true;
+		}
+	}
+
+`path`参数不用多说，就是传入的url字符串，这里使用了`path-to-regexp`这个库，用来匹配url字符串，`options`是`path-to-regexp`需要的配置参数，即为 {sensitive: Boolean, stric: Boolean, end: Boolean}。npm上有该库的详细使用说明，这里就不再讲解了。
+
+
+#### route.js
+
+#### index.js
+
+### application
+
+
+### request 和 response
+
+
+### view
+
+
+### 从请求到响应
