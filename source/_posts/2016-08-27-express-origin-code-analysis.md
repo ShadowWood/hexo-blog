@@ -212,11 +212,208 @@ Router和Route都各自维护了一个stack数组，该数组就是用来存放�
 	}
 
 `path`参数不用多说，就是传入的url字符串，这里使用了`path-to-regexp`这个库，用来匹配url字符串，`options`是`path-to-regexp`需要的配置参数，即为 {sensitive: Boolean, stric: Boolean, end: Boolean}。npm上有该库的详细使用说明，这里就不再讲解了。
+`fn`也就是中间件里的回调处理函数，在Layer初始化的时候将它赋值给了自己的`handle`属性。
 
+之后Layer还定义了三个操作方法：`handle_error`, `handle_request`, `match`。
+
+`handle_error`就是定义的express应用中的错误处理部分，例如app.use(fuction(err, req, res, next){})最后就会执行到这里。
+`handle_request`定义的就是express应用中的路由中间件请求处理函数，也就是例如app.get('/test', function(req, res, next){})的操作最后的执行位置。
+`match`定义的是匹配`path`参数的操作，使用`path-to-regexp`的操作方法，例如在请求过程中`/foo/23`与就会和之前定义的`/foo/:id`相匹配，并最终将对应的`23`赋值`req.params.id`，这一部分的操作需要结合`path-to-regexp`的操作方法去了解。
+
+整个Layer的定义其实并不复杂，它定义了中间件的基本数据结构，是后面Router和Route对象实现的基础。
 
 #### route.js
 
+同样，先从Route对象的初始化入手：
+
+	function Route(path) {
+		this.path = path;
+		this.stack = [];
+
+		debug('new %s', path);
+
+		this.methods = {};
+	}
+
+`path`参数不用多说，`stack`是一个存放layer组件的数组，`methods`是存放HTTP方法的Object，例如{'get': true, 'post': true}，即表示该Route中间件只能接受get和post方法。
+
+紧接着Route通过原型链的方式定义了两个与`methods`紧密相关的方法：
+
++ _handles_method: 判断Route对象中是否存在method(传入参数)方法，并且如果method值为`head`，当作get方法处理；
++ _options：返回Route对象的methods值，并且如果存在`get`，则再添加一个`head`值。
+
+然后就是比较重要的部分，中间件的派发操作：
+
+	Route.prototype.dispatch = function dispatch(req, res, done) {
+		var idx = 0;
+		var stack = this.stack;
+		if (stack.length === 0) {
+			return done();
+		}
+
+		var method = req.method.toLowerCase();
+		if (method === 'head' && !this.methods['head']) {
+			method = 'get';
+		}
+
+		req.route = this;
+
+		next();
+
+		function next(err) {
+			if (err && err === 'route') {
+				return done();
+			}
+
+			var layer = stack[idx++];
+			if (!layer) {
+				return done(err);
+			}
+
+			if (layer.method && layer.method !== method) {
+				return next(err);
+			}
+
+			if (err) {
+				layer.handle_error(err, req, res, next);
+			} else {
+				layer.handle_request(req, res, next);
+			}
+		}
+	};
+
+在知道了`layer`和`stack`这两个事物的基础上，这个函数的操作流程就很好理解了，其实就是通过函数递归的方法，对Route对象的`stack`按插入顺序进行遍历，然后依次执行`stack`里的`layer`的过程。
+当然，首先`req.method`也就是请求的http方法必须在Route对象中的methods之中。
+
+最后就是定义如何调用Route对应的HTTP方法,也就是`router.get`,`router.post`等最终执行的地方
+
+	Route.prototype.all = function all() {
+		var handles = flatten(slice.call(arguments));
+
+		for (var i = 0; i < handles.length; i++) {
+			var handle = handles[i];
+
+			if (typeof handle !== 'function') {
+				var type = toString.call(handle);
+				var msg = 'Route.all() requires callback functions but got a ' + type;
+				throw new TypeError(msg);
+			}
+
+			var layer = Layer('/', {}, handle);
+			layer.method = undefined;
+
+			this.methods._all = true;
+			this.stack.push(layer);
+		}
+
+		return this;
+	};
+
+	methods.forEach(function(method){
+		Route.prototype[method] = function(){
+			var handles = flatten(slice.call(arguments));
+
+			for (var i = 0; i < handles.length; i++) {
+				var handle = handles[i];
+
+				if (typeof handle !== 'function') {
+					var type = toString.call(handle);
+					var msg = 'Route.' + method + '() requires callback functions but got a ' + type;
+					throw new Error(msg);
+				}
+
+				debug('%s %s', method, this.path);
+
+				var layer = Layer('/', {}, handle);
+				layer.method = method;
+
+				this.methods[method] = true;
+				this.stack.push(layer);
+			}
+
+			return this;
+		};
+	});
+
+两个代码块一个是定义了`Route.all`,一个是通过遍历`methods`(require('methods')，存储了各种HTTP请求方法)将其中的元素赋值到成Route对象的属性，也就有了`Route.get`,`Route.post`等方法。
+其实这两个代码块其中的执行流程都大同小异。
+在这里需要注意的是定义`Route.method`(这里method指代all,get,post等)时，其中第一行代码
+
+	var handles = flatten(slice.call(arguments))
+
+这里的handles就是app.get('/path', fn1, fn2, fn3)中的`fn1`,`fn2`,`fn3`等，也就是中间件的回调函数。
+但是如果这样使用，有人会问不应该是slice.call(arguments, 1)，也就是从第二个参数开始截取吗？(slice 是 Array.prototype.slice，在route.js开头定义的)
+刚开始看到这里的时候，笔者也有这个疑问，后来在index.js里面，也就是定义Router对象的地方，找到这么一段代码：
+
+	proto.route = function route(path) {
+		var route = new Route(path);
+
+		var layer = new Layer(path, {
+			sensitive: this.caseSensitive,
+			strict: this.strict,
+			end: true
+		}, route.dispatch.bind(route));
+
+		layer.route = route;
+
+		this.stack.push(layer);
+		return route;
+	};
+
+	// create Router#VERB functions
+	methods.concat('all').forEach(function(method){
+		proto[method] = function(path){
+			var route = this.route(path)
+			route[method].apply(route, slice.call(arguments, 1));
+			return this;
+		};
+	});
+
+这里可以看出Route是被放在了Router的`stack`里的`layer.route`，然后在调用类似Router\[method\](path, fn1, fn2)的时候，已经将其中path提取出来，并且直接通过调用`this.route(path)`赋值到`Route`中的`path`属性，之后将`fn1`,`fn2`通过`slice.call(arguments,1)`的方式截取出来，使用route[method].apply调用到Route.method方法。
+所以在Route.method调用的时候，其arguments已经是回调函数`fn1`，`fn2`等的数组了。
+
+OK，解决了这个疑问，继续下一个重点，可以看见在Route.method的定义中，最终都返回了`this`，加上之前对于arguments的处理，就形成了路由中间件的灵活调用方法：
+
+	router.get('/path', fn1, fn2, fn3);
+
+	router.get('/path', [fn1, [fn2, [fn3]]]);
+
+	router.get('/path', fn1).get('/path', fn2).get('/path', fn3)
+
+这三个最终实现的结果是一样的，第一个和第二个没有什么区别，第三个有些许不一样，第一个和第二个在Router中'fn1,fn2,fn3'都是在同一个layer.route之中，而第三个则是在不同的layer.route之中。
+第一个和第二个是通过遍历Route的stack来找到fn进行执行，而第三个是遍历Router的stack来找到fn进行执行。简单来说就是一个放在外层的stack，一个放在内层的stack。
+
+其实在route.js这部分必须要结合index.js来看，不然对于一些实现方法不是很好理解。
+
 #### index.js
+
+老规矩，还是先从导出对象的基本定义开始。
+
+	var proto = module.exports = function(options) {
+		var opts = options || {};
+
+		function router(req, res, next) {
+			router.handle(req, res, next);
+		}
+
+		// mixin Router class functions
+		router.__proto__ = proto;
+
+		router.params = {};
+		router._params = [];
+		router.caseSensitive = opts.caseSensitive;
+		router.mergeParams = opts.mergeParams;
+		router.strict = opts.strict;
+		router.stack = [];
+
+		return router;
+	};
+
+这里的初始化定义应该不难看懂，options参数就是`pathRegexp`要求的三个配置参数`caseSensitive`,`mergeParams`,`strict`。
+`router.stack`前面也解释得比较多了，这里也不再赘述。`router.params`和`router._params`是定义app.params(param, fn)中会使用到存储对象。
+需要注意的是Router最终返回的是 `router.handle(req,res,next)`的执行函数，`router.handle`是定义的Router中的路由派发操作，类似Route.dispatch，之后这里会详细解释。
+
+
 
 ### application
 
