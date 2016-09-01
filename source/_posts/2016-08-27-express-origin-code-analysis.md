@@ -413,7 +413,271 @@ OK，解决了这个疑问，继续下一个重点，可以看见在Route.method
 `router.stack`前面也解释得比较多了，这里也不再赘述。`router.params`和`router._params`是定义app.params(param, fn)中会使用到存储对象。
 需要注意的是Router最终返回的是 `router.handle(req,res,next)`的执行函数，`router.handle`是定义的Router中的路由派发操作，类似Route.dispatch，之后这里会详细解释。
 
+在这之后在Router对象上定义了param(name, fn)方法，这其实就是app.param(name, fn)定义的部分，这部分会在appliction.js绑定到app.param上，也就成了express文档里的app.param。这部分没有什么难以理解的地方，结合文档看基本可以理解，所以这里就跳过proto.param(name, fn)。
 
+之后就是在Router的初始化里提到过的router.handle的定义：
+
+	proto.handle = function handle(req, res, out) {
+		var self = this;
+
+		debug('dispatching %s %s', req.method, req.url);
+
+		var search = 1 + req.url.indexOf('?');
+		var pathlength = search ? search - 1 : req.url.length;
+		var fqdn = req.url[0] !== '/' && 1 + req.url.substr(0, pathlength).indexOf('://');
+		var protohost = fqdn ? req.url.substr(0, req.url.indexOf('/', 2 + fqdn)) : '';
+		var idx = 0;
+		var removed = '';
+		var slashAdded = false;
+		var paramcalled = {};
+
+		// store options for OPTIONS request
+		// only used if OPTIONS request
+		var options = [];
+
+		// middleware and routes
+		var stack = self.stack;
+
+		// manage inter-router variables
+		var parentParams = req.params;
+		var parentUrl = req.baseUrl || '';
+		var done = restore(out, req, 'baseUrl', 'next', 'params');
+
+		// setup next layer
+		req.next = next;
+
+		// for options requests, respond with a default if nothing else responds
+		if (req.method === 'OPTIONS') {
+			done = wrap(done, function(old, err) {
+				if (err || options.length === 0) return old(err);
+				sendOptionsResponse(res, options, old);
+			});
+		}
+
+		// setup basic req values
+		req.baseUrl = parentUrl;
+		req.originalUrl = req.originalUrl || req.url;
+
+		next();
+
+		function next(err) {
+			/**next 定义，暂时省略 **/
+		}
+
+		function trim_prefix(layer, layerError, layerPath, path) {
+			/**暂时省略 **/
+		}
+	}
+
+因为这部分加上内部定义的函数的话，代码量比较多，一下贴出来不太容易理清思路，所以先将`next`和`trim_prefix`函数省略(`trim_prefix`是在`next`内部调用的)，先看看handle大概做了一件什么事情。
+之前也说过`router.handle`是派发req和res到每个路由中间件的操作，联系之前提到的Route中的`dispatch`方法是通过函数调用的方法来遍历`stack`的中间件实现的req和res的派发，所以这里也是用了同样的操作：“通过递归调用`next`来实现路由派发”。
+但是在调用next()之前，`router.handle`对`req.url`也就是原始的url进行了处理，把请求协议和search参数以及host都提取了出来，所以可以理解为在派发路由前，先对url做了一个预处理操作。
+
+接下来就是仔细看一下看`next`函数是具体定义了一个怎么样的操作：
+
+	function next(err) {
+		var layerError = err === 'route'
+			? null
+			: err;
+
+		// remove added slash
+		if (slashAdded) {
+			req.url = req.url.substr(1);
+			slashAdded = false;
+		}
+
+		// restore altered req.url
+		if (removed.length !== 0) {
+			req.baseUrl = parentUrl;
+			req.url = protohost + removed + req.url.substr(protohost.length);
+			removed = '';
+		}
+
+		// no more matching layers
+		if (idx >= stack.length) {
+			setImmediate(done, layerError);
+			return;
+		}
+
+		// get pathname of request
+		var path = getPathname(req);
+
+		if (path == null) {
+			return done(layerError);
+		}
+
+		// find next matching layer
+		var layer;
+		var match;
+		var route;
+
+		while (match !== true && idx < stack.length) {
+			layer = stack[idx++];
+			match = matchLayer(layer, path);
+			route = layer.route;
+
+			if (typeof match !== 'boolean') {
+				// hold on to layerError
+				layerError = layerError || match;
+			}
+
+			if (match !== true) {
+				continue;
+			}
+
+			if (!route) {
+				// process non-route handlers normally
+				continue;
+			}
+
+			if (layerError) {
+				// routes do not match with a pending error
+				match = false;
+				continue;
+			}
+
+			var method = req.method;
+			var has_method = route._handles_method(method);
+
+			// build up automatic options response
+			if (!has_method && method === 'OPTIONS') {
+				appendMethods(options, route._options());
+			}
+
+			// don't even bother matching route
+			if (!has_method && method !== 'HEAD') {
+				match = false;
+				continue;
+			}
+		}
+
+		// no match
+		if (match !== true) {
+			return done(layerError);
+		}
+
+		// store route for dispatch on change
+		if (route) {
+			req.route = route;
+		}
+
+		// Capture one-time layer values
+		req.params = self.mergeParams
+			? mergeParams(layer.params, parentParams)
+			: layer.params;
+		var layerPath = layer.path;
+
+		// this should be done for the layer
+		self.process_params(layer, paramcalled, req, res, function (err) {
+			if (err) {
+				return next(layerError || err);
+			}
+
+			if (route) {
+				return layer.handle_request(req, res, next);
+			}
+
+			trim_prefix(layer, layerError, layerPath, path);
+		});
+	}
+
+在这里主要关注一下stack的遍历操作。在`next`之中stack的遍历先是通过while循环判断`match`值来确定是否找到匹配的`layer`, `match`是通过调用`matchLayer`返回结果，该方法定义为：
+
+	function matchLayer(layer, path) {
+		try {
+			return layer.match(path);
+		} catch(err) {
+			return err;
+		}
+	}
+
+其实就是调用`layer.match`，只是加了个try catch而已。
+
+如果while循环如果找到了匹配的layer，那么会就会调用`proto.process_params`的方法，也就是self.process_params()这部操作；
+
+`proto.process_params`的源码这里就不贴出来了，了解一下操作流程就好。这个方法需要对应`proto.param`来理解，其实就是***查询并调用***`proto.param`里面***定义且匹配的***与`req.param`绑定的function，这些回调函数都是存储在`proto.params`里面的，所以这里就又会有一个通过函数递归的遍历操作。
+在遍历完了之后就是调用
+
+	function (err) {
+			if (err) {
+				return next(layerError || err);
+			}
+
+			if (route) {
+				return layer.handle_request(req, res, next);
+			}
+
+			trim_prefix(layer, layerError, layerPath, path);
+	}
+
+如果`layer.route`是存在的，结合之前分析的`Layer`和`Route`以及在Route的分析中提前提到这部分后面定义的`Router.route`，也就是：
+
+	proto.route = function route(path) {
+		var route = new Route(path);
+
+		var layer = new Layer(path, {
+			sensitive: this.caseSensitive,
+			strict: this.strict,
+			end: true
+		}, route.dispatch.bind(route));
+
+		layer.route = route;
+
+		this.stack.push(layer);
+		return route;
+	};
+
+`layer.handle_request`会执行`layer.route`的`dispatch`操作，也就是在Route中派发路由最终执行到在express中定义的对应的路由操作函数，之后又执行`next()`就又到了这里的`proto.stack`中的下一个遍历操作。
+但是如果`layer.route`不存在，说明这只是一个中间件而不是路由中间件，也就是用`route.use`定义的中间件，所以就调用`trim_prefix`方法来执行路由中间件：
+
+	function trim_prefix(layer, layerError, layerPath, path) {
+		var c = path[layerPath.length];
+		if (c && '/' !== c && '.' !== c) return next(layerError);
+
+			// Trim off the part of the url that matches the route
+			// middleware (.use stuff) needs to have the path stripped
+		if (layerPath.length !== 0) {
+			debug('trim prefix (%s) from url %s', layerPath, req.url);
+			removed = layerPath;
+			req.url = protohost + req.url.substr(protohost.length + removed.length);
+
+			// Ensure leading slash
+			if (!fqdn && req.url[0] !== '/') {
+				req.url = '/' + req.url;
+				slashAdded = true;
+			}
+
+			// Setup base URL (no trailing slash)
+			req.baseUrl = parentUrl + (removed[removed.length - 1] === '/'
+				? removed.substring(0, removed.length - 1)
+				: removed);
+		}
+
+		debug('%s %s : %s', layer.name, layerPath, req.originalUrl);
+
+		if (layerError) {
+			layer.handle_error(layerError, req, res, next);
+		} else {
+			layer.handle_request(req, res, next);
+		}
+	}
+
+这个方法是在`proto.handle`里定义，和`next`同级。
+
+OK，这里再回到while，如果while循环没有找到匹配的layer就进行收尾工作，要么就根据layerError也就是next(err)中的err参数判断是否已经匹配到结果正常首尾，或者就是404没找到匹配。
+
+分析到这里，这里使用两张图对上面的分析进行一个整理。
+
+首先是layer,Route和Router这三者的关系（原图片来自文章[从express源码中探析其路由机制](https://cnodejs.org/topic/545720506537f4d52c414d87)）
+
+![layer,Route,Router](http://7xu027.com1.z0.glb.clouddn.com/router_route_layer.png)
+
+
+然后是`proto.handle`的一个执行流程：
+
+![proto.handle](http://7xu027.com1.z0.glb.clouddn.com/express_router_handle.png)
+
+有了这两张图，再配合之前的文字描述，应该对路由这部分的处理不会有什么问题了。
 
 ### application
 
