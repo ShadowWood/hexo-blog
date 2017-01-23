@@ -680,7 +680,7 @@ OK，这里再回到while，如果while循环没有找到匹配的layer就进行
 有了这两张图，再配合之前的文字描述，应该对路由这部分的处理不会有什么问题了。
 
 ### application
-
+application.js, 这里就是定义初始化express应用的地方，也就是express.js中的express应用的proto定义的地方，
 
 ### request 和 response
 
