@@ -7,8 +7,12 @@
 <% } else { %>
     <h1><%- item.title || theme.default_post_title || "Untitled" %></h1>
 <% } %>
-<% if(item.cover_detail || theme.default_cover_detail) { %>
-    <span class="image main"><img src="<%- item.cover_detail || theme.default_cover_detail %>" alt="" /></span>
+
+<!-- Tags -->
+<%- partial('article-tags') %>
+
+<% if(item.cover_detail || item.img_url || theme.default_cover_detail) { %>
+    <span class="image main"><img src="<%- item.cover_detail || item.img_url || theme.default_cover_detail %>" alt="" /></span>
 <% } %>
 
 <!-- Gallery -->
@@ -18,9 +22,6 @@
 
 <!-- Content -->
 <%- item.content %>
-
-<!-- Tags -->
-<%- partial('article-tags') %>
 
 <!-- Comments -->
 <div>
