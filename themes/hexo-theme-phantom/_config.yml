@@ -29,14 +29,15 @@ default_cover_detail:
 show_dates: true
 
 # Comments. Choose one by filling up the information
-comments:
-  # Disqus comments
-  disqus_shortname: klugjo
-  # Facebook comments
-  facebook:
-    appid:
-    comment_count: 5
-    comment_colorscheme: light
+# comments:
+#   # Disqus comments
+#   disqus_shortname: klugjo
+#   # Facebook comments
+#   facebook:
+#     appid:
+#     comment_count: 5
+#     comment_colorscheme: light
+comments: false
 
 # Google Analytics Tracking ID
 google_analytics:
