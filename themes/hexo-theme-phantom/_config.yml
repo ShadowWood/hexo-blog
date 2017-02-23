@@ -5,7 +5,7 @@ menu:
   About: /about
 
 # Logo Image Source
-logo_src: /images/logo.svg
+logo_src: /images/logo.png
 
 # Theme Main Subtitle
 subtitle_main: ShadowWood's Blog
@@ -29,15 +29,15 @@ default_cover_detail:
 show_dates: true
 
 # Comments. Choose one by filling up the information
-# comments:
-#   # Disqus comments
-#   disqus_shortname: klugjo
+comments:
+  # Disqus comments
+  disqus_shortname: shadowwood
 #   # Facebook comments
 #   facebook:
 #     appid:
 #     comment_count: 5
 #     comment_colorscheme: light
-comments: false
+# comments: false
 
 # Google Analytics Tracking ID
 google_analytics:

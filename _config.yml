@@ -14,7 +14,8 @@ keywords: python javascript web nodejs fullstack
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://shadowwood.me
+url: https://shadowwood.me
+enforce_ssl: shadowwood.me
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -80,5 +81,12 @@ feed:
   type: atom
   path: atom.xml
   limit: 0
+
+friendlinks:
+  - {name: RaPoSpectre, link: https://www.rapospectre.com/}
+  - {name: Viking Warlock, link: https://vkwk.space/}
+  - {name: Lumia Xu, link: http://www.lumiaxu.com/}
+  - {name: djjowfy, link: http://djjowfy.com/}
+  - {name: ZiriWong, link: http://ziriwong.cc/}
 
 # duoshuo: shadowwood

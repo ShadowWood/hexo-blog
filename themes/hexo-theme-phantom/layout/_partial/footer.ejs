@@ -2,9 +2,13 @@
 <footer id="footer">
     <div class="inner">
         <section>
-            <h2>About</h2>
+            <h2>FriendLinks</h2>
             <div>
-                <%- theme.about_footer %>
+                <% if(theme.friendlinks) {
+                    theme.friendlinks.forEach((obj) => {%>
+                        <a href="<%= obj.link %>" target="_blank"><%= obj.name %></a>&nbsp;&nbsp;
+                    <%})
+                }%>
             </div>
         </section>
         <section>
