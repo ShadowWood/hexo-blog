@@ -1,24 +1,6 @@
 <%
-    var title;
-    var postList = [];
-    if (page.category) {
-        site.categories.forEach(function(item) {
-            if(item.name === page.category) {
-                postList = item.posts.slice();
-            }
-        });
-        title = page.category;
-    }
-    else if (page.tag) {
-        site.tags.forEach(function(item) {
-            if(item.name === page.tag) {
-                postList = item.posts;
-            }
-        });
-        title = page.tag;
-    } else {
-        postList = site.posts;
-    }
+    var title = page.category || page.tag || 'Archives';
+    postList = page.posts;
 %>
 
 <section class="archives">
@@ -26,10 +8,26 @@
         <div class="archive-title"><%- title %></div>
     <% } %>
     <ul class="archive-list">
-        <% postList.each(function(item){ %>
+        <% 
+        var dateShow, year, month;
+        postList.each(function(item){ 
+            item.year = date(item.date, 'YYYY');
+            item.month = date(item.date, 'MM');
+            dateShow = false;
+            if(item.year !== year) {
+                year = item.year;
+                dateShow = true;
+            }
+            if(item.month !== month) {
+                month = item.month;
+                dateShow = true;
+            }
+            if(dateShow) {%>
+                <div class="archive-date"><%= year + '-' + month %></div>
+            <%}
+            %>
             <%- partial('_partial/article-archive', {item: item}) %>
-        <% }); %>
+        <% }); 
+        %>
     </ul>
 </section><!-- end main -->
-
-

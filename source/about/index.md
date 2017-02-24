@@ -1,12 +1,10 @@
 ---
-title: About
+title: About Me
 date: 2016-08-16 20:32:29
 layout: about
 noDate: true
 comments: false
 ---
-
-## Shadow Wood
 
 	class Coder {
 
@@ -29,6 +27,14 @@ comments: false
 	}
 
 	let ShadowWood = new Coder()
+
+曾几何时
+
+想成为一个有趣的人，一不小心却成了一个逗比。
+
+想成为一个权威的人，一不小心又成了一个逗比。
+
+想成为一个有魅力的人，最后还是变成了一个逗比。
 
 
 

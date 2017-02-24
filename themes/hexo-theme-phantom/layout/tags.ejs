@@ -1,0 +1,10 @@
+<h1>Tags</h1>
+<section class="archives">
+  <div>
+    <%
+    site.tags.forEach(function(tag){%>
+        <a href="<%= config.root + tag.path %>" class="button small"><%= tag.name %></a>
+    <%});
+    %>
+  </div>
+</section><!-- end main -->

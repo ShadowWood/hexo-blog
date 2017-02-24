@@ -60,8 +60,27 @@ time_format: HH:mm:ss
 
 # Pagination
 ## Set per_page to 0 to disable pagination
-per_page: 9
-pagination_dir: page
+# per_page: 9
+# pagination_dir: page
+
+index_generator:
+  per_page: 9
+  pagination_dir: index_page
+
+archive_generator:
+  per_page: 0
+  yearly: true
+  monthly: true
+  daily: false
+  pagination_dir: archive_page
+
+tag_generator:
+  per_page: 0
+  pagination_dir: tag_page
+
+category_generator:
+  per_page: 0
+  pagination_dir: cate_page
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/

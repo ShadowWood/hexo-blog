@@ -1,0 +1,8 @@
+<h1>Categories</h1>
+<section class="tiles">
+    <%
+    site.categories.forEach(function(cate, index){%>
+      <%- partial('_partial/category', {item: cate, index: index}) %>
+    <%});
+    %>
+</section>
