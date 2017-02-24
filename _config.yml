@@ -72,11 +72,12 @@ theme: hexo-theme-phantom
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type: git
-  repo: 
-    github: git@github.com:ShadowWood/shadowwood.github.io.git
-    coding: git@git.coding.net:ShaodwWood/blog.git
-  branch: master
+  - type: git
+    repo: git@github.com:ShadowWood/shadowwood.github.io.git
+    branch: master
+  - type: git
+    repo: git@git.coding.net:ShadowWood/ShadowWood.coding.me.git
+    branch: master
 
 
 feed:
