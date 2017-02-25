@@ -86,7 +86,7 @@ category_generator:
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 # theme: hexo-theme-indigo
-theme: hexo-theme-phantom
+theme: phantom
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
