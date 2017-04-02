@@ -70,7 +70,7 @@ index_generator:
 archive_generator:
   per_page: 0
   yearly: true
-  monthly: true
+  monthly: false
   daily: false
   pagination_dir: archive_page
 
