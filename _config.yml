@@ -105,10 +105,21 @@ feed:
   limit: 0
 
 friendlinks:
-  - {name: RaPoSpectre, link: https://www.rapospectre.com/}
-  - {name: Viking Warlock, link: https://vkwk.space/}
-  - {name: Lumia Xu, link: http://www.lumiaxu.com/}
-  - {name: djjowfy, link: http://djjowfy.com/}
-  - {name: ZiriWong, link: http://ziriwong.cc/}
+  - name: RaPoSpectre
+    link: https://www.rapospectre.com/
+  - name: Viking Warlock
+    link: https://vkwk.space/
+  - name: Lumia Xu
+    link: http://www.lumiaxu.com/
+  - name: djjowfy
+    link: http://djjowfy.com/
+  - name: ZiriWong
+    link: http://ziriwong.cc/
+  - name: Toxni
+    link: http://toxni.com/
+  - name: Yasic Yu
+    link: https://www.yasicyu.com/
+  - name: Snowbean
+    link: http://bigpo.top/
 
 # duoshuo: shadowwood
