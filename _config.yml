@@ -5,8 +5,9 @@
 # Site
 title: ShadowWood's Blog
 subtitle: 睡睡觉，玩玩游戏编编程
-description: 一个懒人的分享
+description: 不知道写啥0.0
 author: Shadow Wood
+icon: /images/glasses.svg
 language: zh-CN
 timezone:
 email: shadowwood@foxmail.com
@@ -95,7 +96,7 @@ deploy:
     repo: git@github.com:ShadowWood/shadowwood.github.io.git
     branch: master
   - type: git
-    repo: git@git.coding.net:ShadowWood/ShadowWood.coding.me.git
+    repo: git@git.coding.net:ShaodwWood/ShadowWood.coding.me.git
     branch: master
 
 
@@ -109,17 +110,17 @@ friendlinks:
     link: https://www.rapospectre.com/
   - name: Viking Warlock
     link: https://vkwk.space/
-  - name: Lumia Xu
-    link: http://www.lumiaxu.com/
   - name: djjowfy
     link: http://djjowfy.com/
-  - name: ZiriWong
-    link: http://ziriwong.cc/
   - name: Toxni
     link: http://toxni.com/
   - name: Yasic Yu
     link: https://www.yasicyu.com/
-  - name: Snowbean
-    link: http://bigpo.top/
+
+staticpages:
+  - name: Coding Pages
+    link: https://pages.coding.me
+  - name: GitHub Pages
+    link: https://pages.github.com
 
 # duoshuo: shadowwood
