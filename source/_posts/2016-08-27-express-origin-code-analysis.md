@@ -5,7 +5,7 @@ date:   2016-08-27 21:00:00
 categories: Javascript
 tags: [javascript,node.js,express]
 description: "express是node.js的一个轻量级后端框架，本文将对express的源码实现逻辑及主要服务的实现方式做一些分析"
-img_url: "http://7xu027.com1.z0.glb.clouddn.com/own-world.jpg"
+cover_index: http://7xu027.com1.z0.glb.clouddn.com/source.png
 ---
 
 ## 前言

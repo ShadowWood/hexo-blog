@@ -4,6 +4,7 @@ title:  "ubuntu上搭建PPPoE认证服务器"
 date:   2015-04-18 13:13:37
 categories: Linux
 tags: [Linux, PPPoE]
+img_url: http://7xu027.com1.z0.glb.clouddn.com/221_android_1.jpg
 ---
 
 

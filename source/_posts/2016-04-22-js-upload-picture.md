@@ -5,7 +5,7 @@ date:   2016-04-22 13:23:00
 categories: Javascript
 tags: [javascript,图片上传,异步]
 description: "最近在做express练习项目的时候需要解决一个图片异步上传的问题，简单分享下几种的实现方式"
-img_url: "http://7xu027.com1.z0.glb.clouddn.com/1085__shining-together_p.jpg"
+cover_index: http://7xu027.com1.z0.glb.clouddn.com/upload.jpg
 ---
 
 ### 前言
