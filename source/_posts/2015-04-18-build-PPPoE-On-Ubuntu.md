@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "ubuntu上搭建PPPoE认证服务器"
+description: "本文主要介绍在ubuntu上搭建PPPoE服务器的基本流程以及一些遇到的问题总结"
 date:   2015-04-18 13:13:37
 categories: Linux
 tags: [Linux, PPPoE]
