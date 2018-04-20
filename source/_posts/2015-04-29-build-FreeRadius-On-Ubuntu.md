@@ -4,7 +4,6 @@ title:  "ubuntu上安装和配置FreeRadius"
 date:   2015-04-29 15:09:00
 categories: Linux
 tags: [Linux,FreeRadius]
-description: "本学期综合课程设计的内容，分享自己在ubuntu上安装FreeRadius的步骤及遇到的问题，系统为Ubuntu 14.04，数据库选用用mysql"
 img_url: "http://7xu027.com1.z0.glb.clouddn.com/build-Radius.jpg"
 ---
 

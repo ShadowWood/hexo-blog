@@ -4,15 +4,12 @@ title:  "express源码分析"
 date:   2016-08-27 21:00:00
 categories: Javascript
 tags: [javascript,node.js,express]
-description: "express是node.js的一个轻量级后端框架，本文将对express的源码实现逻辑及主要服务的实现方式做一些分析"
 cover_index: http://7xu027.com1.z0.glb.clouddn.com/source.png
 ---
 
 ## 前言
 
 express是node.js的一个轻量级后端框架，本文将对express的源码实现逻辑及主要服务的实现方式做一些分析
-
-<!-- more -->
 
 ## 基本结构
 
@@ -39,6 +36,8 @@ express是node.js的一个轻量级后端框架，本文将对express的源码�
     └── Readme.md
 
 express模块的入口是 index.js，该文件中又引入了./lib/express.js，并将其用module.exports导出。
+
+<!-- more -->
 
 ## express.js
 `lib/express.js`是对express所有定义及功能模块的整合，该文件的开头如下：

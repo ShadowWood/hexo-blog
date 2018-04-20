@@ -4,7 +4,6 @@ title:  "PPPoE服务器添加Radius支持"
 date:   2015-05-19 8:46:00
 categories: Linux
 tags: [Linux,PPPoE,Radius]
-description: "本文章将分享如何将PPPoE服务器与Radius服务器进行对接，以及在配置过程中遇到的一些问题解决办法。"
 img_url: "http://7xu027.com1.z0.glb.clouddn.com/PPPoE-Radius.jpg"
 ---
 

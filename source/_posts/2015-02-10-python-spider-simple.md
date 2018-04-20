@@ -4,7 +4,6 @@ title:  "python网络爬虫入门"
 date:   2015-02-10 8:13:30
 categories: Python
 tags: [python,网络爬虫]
-description: "本文将介绍python基本的网络请求方式，以及网页抓包分析，适合于刚开始接触python的人学习"
 img_url: "http://7xu027.com1.z0.glb.clouddn.com/web-spider.jpg"
 ---
 

@@ -1,3 +1,6 @@
 [submodule "themes/phantom"]
 	path = themes/phantom
 	url = git@github.com:ShadowWood/hexo-theme-phantom.git
+[submodule "themes/nextv6"]
+	path = themes/phantomv6
+	url = git@github.com:ShadowWood/hexo-theme-next.git

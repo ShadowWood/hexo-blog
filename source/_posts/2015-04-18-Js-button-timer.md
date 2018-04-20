@@ -4,7 +4,6 @@ title:  "javascript实现按钮计时"
 date:   2015-04-18 18:15:30
 categories: Javascript
 tags: [javascript]
-description: "在web端实现简单的按钮计时，防止用户短时间内重复的操作"
 img_url: "http://7xu027.com1.z0.glb.clouddn.com/button-timer.jpg"
 ---
 
